@@ -15,25 +15,14 @@ class ViewController: UIViewController {
     @IBOutlet weak var displayTableView: UITableView!
 
     @IBAction func submitButton(_ sender: UIButton) {
-        let n = Int(maxInt.text!)
+        let n = maxInt.text!
         
-        // let sqrtn = sqrt(Double(n!))
+        let A = 
         
-        var maxIntArray = Array(repeating: true, count: Int(n!))
-        
-        for i in 2..<n!{
-            if (i%n!==0) {
-                maxIntArray[i] = false
-            }
-        }
-        
-        for item in maxIntArray {
-            
-                print(item)
-            
+        for i in 2...Int(sqrt(Double(n)!))
+        {
             
         }
-        
     }
     override func viewDidLoad() {
         super.viewDidLoad()
