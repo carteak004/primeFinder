@@ -19,7 +19,7 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
     @IBAction func submitButton(_ sender: UIButton) {
         //referred to psuedocode given in wikipedia page about Sieve of Eratosthenes
         let n = maxInt.text!
-        var A = Array(repeating: true, count: Int(n)!+1)
+        var A = Array(repeating: true, count: Int(n)!)
         if (Int(n)! > 3)
         {
             
@@ -33,8 +33,10 @@ class ViewController: UIViewController, UITableViewDelegate, UITableViewDataSour
                     }
                 }
             }
-       
-            for i in 2...Int(n)! {
+            
+            resultArray = []
+            
+            for i in 2..<Int(n)! {
                 if (A[i])
                 {
                     //print(i)
