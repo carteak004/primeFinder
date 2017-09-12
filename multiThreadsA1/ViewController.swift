@@ -19,36 +19,38 @@ class ViewController: UIViewController {
         
         
         //MARK: METHOD 1
-        /*
-         var A = Array(repeating: true, count: n!)
-         print(A)
-         
-         for i in 2...Int(sqrt(Double(n!)))
-         {
-         for j in 1...(n!-1)
-         {
-         if j%i == 0
-         {
-         A[j] = false
-         }
-         }
-         }
-         
-         for i in 2...(n!-1)
-         {
-         if A[i]
-         {
-         print(i)
-         }
-         }
-         */
+        var prime = Array(repeating: true, count: maxInt!+1)
         
+        var p = 2
+        while(p*p <= maxInt!)
+        {
+            if prime[p] == true
+            {
+                for i in stride(from: p*2, to: maxInt!+1, by: p)
+                {
+                    prime[i] = false
+                }
+            }
+            p = p + 1
+        }
+        
+        for p in 2...maxInt!
+        {
+            if prime[p]
+            {
+                print(p)
+            }
+        }
         
         //MARK: METHOD 2
+        /*
+        var res = [Int]()
+        
         for i in 3...maxInt!
         {
             //use break
         }
+ */
     }
     override func viewDidLoad() {
         super.viewDidLoad()
