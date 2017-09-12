@@ -54,7 +54,7 @@
                     <navigationItem key="navigationItem" title="Multithread Prime Finder" id="Dxd-bK-kNV"/>
                     <connections>
                         <outlet property="displayTableView" destination="W8x-9b-dLB" id="fkw-d7-0x0"/>
-                        <outlet property="maxInt" destination="Ny1-Qx-tFu" id="g20-1a-nO9"/>
+                        <outlet property="maxIntTextField" destination="Ny1-Qx-tFu" id="rwE-z7-8GU"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
