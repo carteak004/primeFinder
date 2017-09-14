@@ -112,6 +112,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         primeArray = ["one","two"]
+        displayTableView.reloadData()
+        print(primeArray)
+        
         displayTableView.isHidden = true
     }
     
@@ -126,7 +129,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        print(primeArray.count)
+        //print(primeArray.count)
         return primeArray.count
     }
     
