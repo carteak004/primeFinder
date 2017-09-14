@@ -118,6 +118,22 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         displayTableView.isHidden = true
     }
     
+    
+    //MARK: Queueing
+    var inactiveQueue: DispatchQueue!
+    
+    func concurrentQueues()
+    {
+        let queueX = DispatchQueue(label: "edu.niu.cs.queueX",
+                                   qos: .userInitiated,
+                                   attributes: [.concurrent, .initiallyInactive])
+        inactiveQueue = queueX
+        
+        queueX.async {
+            methodOne(maxInt: maxIntTextField.text!)
+        }
+    }
+    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
