@@ -179,6 +179,8 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     func concurrentQueues(maxInt : Int)
     {
+        let start = NSDate()
+        let end = NSDate()
        /* let queueX = DispatchQueue(label: "edu.niu.cs.queueX",
                                    qos: .userInitiated,
                                    attributes: [.concurrent, .initiallyInactive])
@@ -186,40 +188,17 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         
         let queueX = DispatchQueue(label: "edu.niu.cs.queueX")
         queueX.async {
-            //self.primeArray = self.methodOne(maxInt: maxInt)
+            self.primeArray = self.methodOne(maxInt: maxInt)
             //print(self.primeArray)
-            self.primeArray = []
-            var prime = Array(repeating: true, count: (maxInt+1)/2)
             
-            var p = 2
-            while(p*p <= maxInt/2)
-            {
-                if prime[p] == true
-                {
-                    for i in stride(from: p*2, to: maxInt+1, by: p)
-                    {
-                        prime[i] = false
-                    }
-                }
-                p = p + 1
-            }
-            
-            for p in 2...maxInt
-            {
-                if prime[p]
-                {
-                    self.primeArray.append(String(p))
-                }
-            }
-
         }
         
         queueX.async {
-            for i in 4...7
-            {
-                print("\(i) thread 2")
-            }
+            
         }
+        let timeInterval = end.timeIntervalSince(start as Date)
+        
+        print(timeInterval)
     }
  
     
