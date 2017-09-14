@@ -80,6 +80,36 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     //MARK: METHOD 1
+    /*
+    func methodOne(maxInt: Int) -> Array<String>
+    {
+        primeArray = []
+        var prime = Array(repeating: true, count: maxInt+1)
+        
+        var p = 2
+        while(p*p <= maxInt)
+        {
+            if prime[p] == true
+            {
+                for i in stride(from: p*2, to: maxInt+1, by: p)
+                {
+                    prime[i] = false
+                }
+            }
+            p = p + 1
+        }
+        
+        for p in 2...maxInt
+        {
+            if prime[p]
+            {
+                primeArray.append(String(p))
+            }
+        }
+        //print(primeArray)
+        return primeArray
+    }*/
+    
     func methodOne(maxInt: Int) -> Array<String>
     {
         primeArray = []
@@ -123,7 +153,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 {
                     if (x % y == 0)
                     {
-                        p = false
+                                                                                                    p = false
                         break
                     }
                 }
@@ -158,12 +188,6 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         queueX.async {
             self.primeArray = self.methodOne(maxInt: maxInt)
             print(self.primeArray)
-            
-            for i in 1...3
-            {
-                print("\(i) thread 1")
-            }
-            
         }
         
         queueX.async {
