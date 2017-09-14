@@ -11,14 +11,13 @@ import UIKit
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var primeArray: [String] = []
+    var inactiveQueue: DispatchQueue!
     
     
     @IBOutlet weak var maxIntTextField: UITextField!
     
     @IBOutlet weak var displayTableView: UITableView!
     
-    @IBAction func methodSelector(_ sender: UISegmentedControl) {
-    }
     
     @IBOutlet weak var threadsLabel: UILabel!
     @IBOutlet weak var threadStepper: UIStepper!
@@ -27,12 +26,39 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     @IBAction func startButton(_ sender: UIButton) {
-        let maxInt = Int(maxIntTextField.text!)
-        primeArray = methodOne(maxInt: maxInt!)
+        let maxInt = Int(maxIntTextField.text!) ?? 2
+        //primeArray = methodOne(maxInt: maxInt!)
+       /*
+        let queueX = DispatchQueue(label: "edu.niu.cs.queueX",
+                                   qos: .userInitiated,
+                                   attributes: [.concurrent, .initiallyInactive])
+        
+        if let queue = inactiveQueue
+        {
+            queue.activate()
+        }
+        
+        inactiveQueue = queueX
+        */
+        
+        concurrentQueues(maxInt: maxInt)
+        
+        /*
+        let queueX = DispatchQueue(label: "edu.niu.cs.queueX")
+        
+        queueX.async {
+            self.primeArray = self.methodOne(maxInt: maxInt)
+            print(self.primeArray)
+            //self.displayTableView.reloadData()
+        }*/
+        
+        //print(primeArray)
+        //print(maxInt)//method one is written outside queue
     }
     
     @IBOutlet weak var toggleViewButtonOutlet: UIButton!
     @IBAction func toggleViewButton(_ sender: UIButton) {
+        /*
         if(toggleViewButtonOutlet.currentTitle! == "Show")
         {
             toggleViewButtonOutlet.setTitle("Hide", for: .normal)
@@ -42,11 +68,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         {
             toggleViewButtonOutlet.setTitle("Show", for: .normal)
             displayTableView.isHidden = true
-        }
+        }*/
+        displayTableView.reloadData()
     }
     
     @IBAction func clearButton(_ sender: UIButton) {
         primeArray = []
+        maxIntTextField.text = ""
+        displayTableView.reloadData()
+        //print(primeArray)
     }
     
     //MARK: METHOD 1
@@ -75,12 +105,12 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
                 primeArray.append(String(p))
             }
         }
-        print(primeArray)
+        //print(primeArray)
         return primeArray
     }
     
     //MARK: METHOD 2
-    
+    /*
     func methodTwo(maxInt: Int) -> Array<String>
     {
         primeArray = []
@@ -108,31 +138,42 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return primeArray
     }
 
-    
+    */
     override func viewDidLoad() {
         super.viewDidLoad()
-        primeArray = ["one","two"]
-        displayTableView.reloadData()
-        print(primeArray)
-        
-        displayTableView.isHidden = true
     }
     
     
     //MARK: Queueing
-    var inactiveQueue: DispatchQueue!
     
-    func concurrentQueues()
+    
+    func concurrentQueues(maxInt : Int)
     {
-        let queueX = DispatchQueue(label: "edu.niu.cs.queueX",
+       /* let queueX = DispatchQueue(label: "edu.niu.cs.queueX",
                                    qos: .userInitiated,
                                    attributes: [.concurrent, .initiallyInactive])
-        inactiveQueue = queueX
+        inactiveQueue = queueX*/
+        
+        let queueX = DispatchQueue(label: "edu.niu.cs.queueX")
+        queueX.async {
+            self.primeArray = self.methodOne(maxInt: maxInt)
+            print(self.primeArray)
+            
+            for i in 1...3
+            {
+                print("\(i) thread 1")
+            }
+            
+        }
         
         queueX.async {
-            methodOne(maxInt: maxIntTextField.text!)
+            for i in 4...7
+            {
+                print("\(i) thread 2")
+            }
         }
     }
+ 
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -145,16 +186,13 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        //print(primeArray.count)
         return primeArray.count
     }
     
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = displayTableView.dequeueReusableCell(withIdentifier: "CELL", for: indexPath)
-        
-        //let primeResult = primeArray[indexPath.row]
-        
-        cell.textLabel?.text = self.primeArray[indexPath.row]
+        let cell = displayTableView.dequeueReusableCell(withIdentifier: "CELL", for: indexPath) as! TableViewCell
+        let primeResult = primeArray[indexPath.row]
+        cell.dataViewLabel.text = primeResult
         
         return cell
     }

@@ -2,7 +2,7 @@
 //  TableViewCell.swift
 //  multiThreadsA1
 //
-//  Created by ta on 9/6/17.
+//  Created by Kartheek chintalapati on 14/09/17.
 //  Copyright © 2017 ta. All rights reserved.
 //
 
@@ -10,8 +10,7 @@ import UIKit
 
 class TableViewCell: UITableViewCell {
 
-    
-    @IBOutlet weak var dispLabel: UILabel!
+    @IBOutlet weak var dataViewLabel: UILabel!
     
     override func awakeFromNib() {
         super.awakeFromNib()
