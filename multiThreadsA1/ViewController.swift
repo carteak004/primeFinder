@@ -11,6 +11,7 @@ import UIKit
 class ViewController: UIViewController, UITableViewDataSource, UITableViewDelegate {
     
     var primeArray: [String] = []
+    var primeBool: [Bool] = []
     var inactiveQueue: DispatchQueue!
     
     
@@ -18,6 +19,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     @IBOutlet weak var displayTableView: UITableView!
     
+    @IBOutlet weak var timeElapsedLabel: UILabel!
     
     @IBOutlet weak var threadsLabel: UILabel!
     @IBOutlet weak var threadStepper: UIStepper!
@@ -26,38 +28,28 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     @IBAction func startButton(_ sender: UIButton) {
-        let maxInt = Int(maxIntTextField.text!) ?? 2
-        //primeArray = methodOne(maxInt: maxInt!)
-       /*
-        let queueX = DispatchQueue(label: "edu.niu.cs.queueX",
-                                   qos: .userInitiated,
-                                   attributes: [.concurrent, .initiallyInactive])
-        
-        if let queue = inactiveQueue
+        view.endEditing(true)
+        let maxVal = Int(maxIntTextField.text!) ?? 2
+        if (maxVal >= 2 && maxVal <= 10000)
         {
-            queue.activate()
+            concurrentQueues(maxInt: maxVal)
         }
-        
-        inactiveQueue = queueX
-        */
-        
-        concurrentQueues(maxInt: maxInt)
-        
-        /*
-        let queueX = DispatchQueue(label: "edu.niu.cs.queueX")
-        
-        queueX.async {
-            self.primeArray = self.methodOne(maxInt: maxInt)
-            print(self.primeArray)
-            //self.displayTableView.reloadData()
-        }*/
-        
-        //print(primeArray)
-        //print(maxInt)//method one is written outside queue
+        else
+        {
+            let alert = UIAlertController(title: "Really!", message: "Did you check the LIMITS!!!", preferredStyle: .alert)
+            
+            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+            
+            self.present(alert, animated: true, completion: nil)
+            
+            maxIntTextField.text = ""
+        }
+       
     }
     
     @IBOutlet weak var toggleViewButtonOutlet: UIButton!
     @IBAction func toggleViewButton(_ sender: UIButton) {
+        view.endEditing(true)
         /*
         if(toggleViewButtonOutlet.currentTitle! == "Show")
         {
@@ -73,6 +65,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     }
     
     @IBAction func clearButton(_ sender: UIButton) {
+        view.endEditing(true)
         primeArray = []
         maxIntTextField.text = ""
         displayTableView.reloadData()
@@ -109,36 +102,40 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //print(primeArray)
         return primeArray
     }*/
+    //func methodOne(maxInt: Int , num: Int, thread: Int, arr: [(Bool)]) -> (Array<String>, Array<Bool>)
     
-    func methodOne(maxInt: Int) -> Array<String>
+    
+    
+    func methodOne(startVal: Int , endVal: Int, maxInt: Int, thread: Int) -> Array<String>
     {
-        primeArray = []
-        var prime = Array(repeating: true, count: maxInt+1)
         
-        var p = 2
+        var p=2
         while(p*p <= maxInt)
         {
-            if prime[p] == true
+            if primeBool[p] == true
             {
-                for i in stride(from: p*2, to: maxInt+1, by: p)
+                for i in stride(from: startVal, to: endVal, by: p)
                 {
-                    prime[i] = false
+                    primeBool[i] = false
                 }
             }
             p = p + 1
         }
         
-        for p in 2...maxInt
+        for p in 2...endVal
         {
-            if prime[p]
+            if primeBool[p]
             {
-                primeArray.append(String(p))
+                primeArray.append("\(p) - Thread \(thread)")
             }
         }
         //print(primeArray)
         return primeArray
     }
     
+
+    
+ 
     //MARK: METHOD 2
     /*
     func methodTwo(maxInt: Int) -> Array<String>
@@ -175,33 +172,43 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     
     
     //MARK: Queueing
-    
-    
     func concurrentQueues(maxInt : Int)
     {
         let start = NSDate()
+        
+        primeArray = []
+        primeBool = Array(repeating: true, count: maxInt+1)
+        let numThreads = Int(threadsLabel.text!)!
+        var firstTime = true
+        var startVal: Int, endVal: Int
+        for i in stride(from: 1, through: numThreads, by: 1)
+        {
+            let queueX = DispatchQueue(label: "edu.niu.cs.queueX")
+            
+            if (firstTime)
+            {
+                startVal = 2
+                firstTime = false
+            }
+            else
+            {
+                startVal = ((i-1)*maxInt)/numThreads
+            }
+            
+            endVal = (i*maxInt)/numThreads
+            
+            queueX.async {
+                self.primeArray = self.methodOne(startVal: startVal, endVal: endVal, maxInt: maxInt, thread: i)
+            }
+        }
+        
         let end = NSDate()
-       /* let queueX = DispatchQueue(label: "edu.niu.cs.queueX",
-                                   qos: .userInitiated,
-                                   attributes: [.concurrent, .initiallyInactive])
-        inactiveQueue = queueX*/
-        
-        let queueX = DispatchQueue(label: "edu.niu.cs.queueX")
-        queueX.async {
-            self.primeArray = self.methodOne(maxInt: maxInt)
-            //print(self.primeArray)
-            
-        }
-        
-        queueX.async {
-            
-        }
         let timeInterval = end.timeIntervalSince(start as Date)
         
-        print(timeInterval)
+        timeElapsedLabel.text = "\(((Double(timeInterval)*1000000).rounded())/1000) milliseconds"
+        //print(((Double(timeInterval)*1000000).rounded())/1000)
     }
  
-    
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
@@ -222,6 +229,20 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         cell.dataViewLabel.text = primeResult
         
         return cell
+    }
+    
+    //MARK: Delegate Methods
+    
+    //This function dismisses the keyboard when tapped outside the field
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
+        view.endEditing(true)
+    }
+    
+    //This function dismisses the keyboard when the user presses the return key
+    func textFieldShouldReturn(textField: UITextField) -> Bool {
+        maxIntTextField.resignFirstResponder()
+        
+        return true
     }
 }
 

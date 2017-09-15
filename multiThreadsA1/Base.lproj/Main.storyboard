@@ -119,14 +119,14 @@
                                 </connections>
                             </button>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Time elapsed:" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="9VW-HF-VB9">
-                                <rect key="frame" x="16" y="230" width="108" height="21"/>
+                                <rect key="frame" x="15" y="238" width="108" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
                                 <nil key="highlightedColor"/>
                             </label>
                             <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" fixedFrame="YES" text="Label" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Eu7-xT-j6l">
-                                <rect key="frame" x="132" y="230" width="227" height="21"/>
+                                <rect key="frame" x="132" y="238" width="227" height="21"/>
                                 <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                 <fontDescription key="fontDescription" type="system" pointSize="17"/>
                                 <nil key="textColor"/>
@@ -143,6 +143,7 @@
                         <outlet property="maxIntTextField" destination="Ny1-Qx-tFu" id="rwE-z7-8GU"/>
                         <outlet property="threadStepper" destination="TSj-yV-uYo" id="Od5-fd-7jk"/>
                         <outlet property="threadsLabel" destination="igN-xG-U4h" id="J2p-Bd-zTl"/>
+                        <outlet property="timeElapsedLabel" destination="Eu7-xT-j6l" id="z0v-l4-hnS"/>
                         <outlet property="toggleViewButtonOutlet" destination="HdS-lR-7GE" id="BAn-i8-Lnj"/>
                     </connections>
                 </viewController>
