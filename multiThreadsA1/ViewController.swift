@@ -36,15 +36,9 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         }
         else
         {
-            let alert = UIAlertController(title: "Really!", message: "Did you check the LIMITS!!!", preferredStyle: .alert)
-            
-            alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
-            
-            self.present(alert, animated: true, completion: nil)
-            
+            displayAlert()
             maxIntTextField.text = ""
         }
-       
     }
     
     @IBOutlet weak var toggleViewButtonOutlet: UIButton!
@@ -70,6 +64,15 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         maxIntTextField.text = ""
         displayTableView.reloadData()
         //print(primeArray)
+    }
+    
+    func displayAlert()
+    {
+        let alert = UIAlertController(title: "Really!", message: "Did you check the LIMITS!!!", preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "OK", style: .default, handler: nil))
+        
+        self.present(alert, animated: true, completion: nil)
     }
     
     //MARK: METHOD 1
@@ -105,24 +108,39 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
     //func methodOne(maxInt: Int , num: Int, thread: Int, arr: [(Bool)]) -> (Array<String>, Array<Bool>)
     
     
-    
+  /*
     func methodOne(startVal: Int , endVal: Int, maxInt: Int, thread: Int) -> Array<String>
     {
-        
         var p=2
+        
+        var start = startVal
+        print(start)
+        print(endVal)
         while(p*p <= maxInt)
         {
+            print("\(p)-p val")
+            if(endVal == maxInt/3 || endVal == maxInt/2 || endVal == maxInt/4)
+            {
+                print("came inside")
+                start = 2*p
+            }
+            print("\(start)-start inside loop")
+            
             if primeBool[p] == true
             {
-                for i in stride(from: startVal, to: endVal, by: p)
+                for i in stride(from: start, through: endVal, by: p)
                 {
-                    primeBool[i] = false
+                    if (i%p == 0)
+                    {
+                        print("\(i) - i")
+                        primeBool[i] = false
+                    }
                 }
             }
             p = p + 1
         }
         
-        for p in 2...endVal
+        for p in startVal...endVal
         {
             if primeBool[p]
             {
@@ -133,7 +151,7 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         return primeArray
     }
     
-
+*/
     
  
     //MARK: METHOD 2
@@ -179,27 +197,29 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         primeArray = []
         primeBool = Array(repeating: true, count: maxInt+1)
         let numThreads = Int(threadsLabel.text!)!
-        var firstTime = true
+        //var firstTime = true //for first time only. This will put 2 in startVal for first time.
         var startVal: Int, endVal: Int
         for i in stride(from: 1, through: numThreads, by: 1)
         {
+            print("inside for \(i)th time")
             let queueX = DispatchQueue(label: "edu.niu.cs.queueX")
             
-            if (firstTime)
+           /* if (firstTime)
             {
                 startVal = 2
                 firstTime = false
             }
             else
-            {
-                startVal = ((i-1)*maxInt)/numThreads
-            }
+            {*/
+                startVal = (((i-1)*maxInt)/numThreads)
+            //}
             
             endVal = (i*maxInt)/numThreads
             
-            queueX.async {
+            queueX.sync {
                 self.primeArray = self.methodOne(startVal: startVal, endVal: endVal, maxInt: maxInt, thread: i)
             }
+            print("end \(i)")
         }
         
         let end = NSDate()
@@ -209,6 +229,57 @@ class ViewController: UIViewController, UITableViewDataSource, UITableViewDelega
         //print(((Double(timeInterval)*1000000).rounded())/1000)
     }
  
+    //****************************************************************************************************************
+    
+    func methodOne(startVal: Int, endVal: Int, maxInt: Int, thread: Int) -> Array<String>
+    {
+        var p = 2, start = startVal
+        
+        while(p*p <= maxInt)
+        {
+            if(primeBool[p] == true)
+            {
+                //var flag = true
+                if(endVal == maxInt/3 || endVal == maxInt/2 || endVal == maxInt/4)
+                {
+                    print("came inside")
+                    start = 2*p
+                }
+                else{
+                    for i in start...endVal
+                    {
+                        if i%p == 0
+                        {
+                            start = i
+                            //flag = false
+                            print("\(start) - start, \(p) - p inside i%p")
+                            break;
+                        }
+                    }
+                }
+                
+                print("\(start) - start, \(endVal) - endval, \(p) - p before stride for")
+                for j in stride(from: start, through: endVal, by: p)
+                {
+                    primeBool[j] = false
+                    print(j)
+                }
+            }
+            
+            p = p+1
+        }
+        
+        for k in startVal...endVal
+        {
+            if primeBool[k] && k != 1 && k != 0
+            {
+                primeArray.append("Prime \(k) - Thread \(thread)")
+            }
+        }
+        return primeArray
+    }
+    
+    //****************************************************************************************************************
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
