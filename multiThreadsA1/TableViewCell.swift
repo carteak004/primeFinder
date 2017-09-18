@@ -2,10 +2,13 @@
 //  TableViewCell.swift
 //  multiThreadsA1
 //
-//  Created by Kartheek chintalapati on 14/09/17.
-//  Copyright © 2017 ta. All rights reserved.
+//  Created by Kartheek chintalapati on 9/14/17.
+//  Copyright © 2017 Kartheek Chintalapati. All rights reserved.
 //
 
+/********************************************************************************************
+ Has outlet to the label on the prototype cell.
+ ********************************************************************************************/
 import UIKit
 
 class TableViewCell: UITableViewCell {

@@ -2,8 +2,8 @@
 //  AppDelegate.swift
 //  multiThreadsA1
 //
-//  Created by ta on 9/5/17.
-//  Copyright © 2017 ta. All rights reserved.
+//  Created by Kartheek Chintalapati on 9/5/17.
+//  Copyright © 2017 Kartheek Chintalapati. All rights reserved.
 //
 
 import UIKit
